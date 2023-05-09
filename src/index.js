@@ -52,7 +52,6 @@ app.post("/usuarios",(request, response)=>{
 app.post("/usuarios/login", (request, response)=>{
     let login = request.body
     let entrarEmail = usuarios.some(user => user.email === login.email)
-    //let entrarSenha = usuarios.find(user => user.senha === login.senha)
     
 
     if(entrarEmail){
@@ -78,9 +77,9 @@ app.get("/usuarios", (request, response)=>{
 })
 
 
+//var = variavel global
 
-
-//Update
+//Recados
 
 
 
