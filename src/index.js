@@ -80,6 +80,8 @@ app.get("/usuarios", (request, response)=>{
 //var = variavel global
 
 //Recados
+//id usuario para linkar recado ao usuario
+//na hora de criar recado, usar o id do usuario para conectar esse recado aquele usuario
 
 
 
