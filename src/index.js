@@ -47,7 +47,6 @@ app.post("/usuarios",(request, response)=>{
 
 
 
-
 //Login
 app.post("/usuarios/login", (request, response)=>{
     let login = request.body
@@ -65,7 +64,7 @@ app.post("/usuarios/login", (request, response)=>{
             }
         })
     }
-    
+    console.log(usuarios)
     
 })
 
@@ -77,11 +76,63 @@ app.get("/usuarios", (request, response)=>{
 })
 
 
-//var = variavel global
+//primeiro jeito que eu fiz pra criar recados
+let recados = []
+app.post("/recados", (request, response)=>{
+    let recado = request.body
+    let idReq = usuarios.findIndex(user => user.id === recado.idUsuario)
 
-//Recados
-//id usuario para linkar recado ao usuario
-//na hora de criar recado, usar o id do usuario para conectar esse recado aquele usuario
+    if(idReq === -1){
+        return response.status(400).json("ID não encontrado. Digite um ID existente.")
+    }
+    
+
+    recados.push({
+        idUsuario: recado.idUsuario,
+        idRecado: Math.floor(Math.random()*67676), 
+        titulo: recado.titulo,
+        recado: recado.recado         
+    })
+    console.log(recados)
+    return response.status(200).json("Recado criado com sucesso.")
+
+
+
+})
+
+
+
+
+
+//lista recados
+app.get("/usuarios/recados/:id", (request, response)=>{
+    let id = Number(request.params.id)
+    let recado = recados.filter(user => user.idUsuario===id)
+    return response.status(200).json(recado)
+    
+})
+
+//update recado
+
+app.put("recados/:idRecado",  (request, response)=>{
+    try{
+        let id = Number(request.params.idRecado)
+        let titulo = request.body.titulo
+        let recado = request.body.recado
+
+        let index = recados.findIndex((recado)=>{recado.idRecado === id})
+
+        if(index){
+        recados[index].titulo = titulo
+        recados[index].recado = recado
+        }
+        return response.status(201).json("Recado alterado com sucesso.")
+    }catch(error){
+        return response.status(404).send(error.message)
+    }
+
+})
+
 
 
 
