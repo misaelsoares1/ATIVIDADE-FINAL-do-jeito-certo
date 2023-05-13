@@ -30,7 +30,7 @@ app.post("/usuarios",(request, response)=>{
                 senha: hash
             }); 
             
-            return response.status(204).json();
+            return response.status(201).json();
         } else {
             return response.status(400).json("Ocorreu um erro:" + err)
         }
@@ -53,9 +53,9 @@ app.post("/usuarios/login", (request, response)=>{
         
         bcrypt.compare(login.senha, usuarios[index].senha, (err, hash)=>{
             if(hash){
-                return response.status(200).json("login com sucesso")
+                return response.status(202).json("login com sucesso")
             }else{
-                return response.status(400).json("Email ou senha não existe.")
+                return response.status(404).json("Email ou senha não existe.")
             }
         })
     }
@@ -77,7 +77,7 @@ app.post("/recados", (request, response)=>{
     let idReq = usuarios.findIndex(user => user.id === recado.idUsuario)
 
     if(idReq === -1){
-        return response.status(400).json("ID não encontrado. Digite um ID existente.")
+        return response.status(404).json("ID não encontrado. Digite um ID existente.")
     }
     
 
@@ -88,7 +88,7 @@ app.post("/recados", (request, response)=>{
         recado: recado.recado         
     })
 
-    return response.status(200).json("Recado criado com sucesso.")
+    return response.status(201).json("Recado criado com sucesso.")
 
 
 
@@ -110,7 +110,7 @@ app.put("/recados/:idRecado",  (request, response)=>{
     if(recado){
         recado.titulo = request.body.titulo
         recado.recado = request.body.recado
-        return response.status(200).json("Recado alterado com sucesso.")
+        return response.status(202).json("Recado alterado com sucesso.")
     }else{
         return response.status(404).json("Recado não encontrado")
     }
@@ -123,7 +123,7 @@ app.delete("/recados/delete/:idRecado", (request, response)=>{
     if(recado){
         let index = recados.indexOf(recado)
         recados.splice(index, 1)
-        return response.status(200).json("Recado removido com sucesso.")
+        return response.status(202).json("Recado removido com sucesso.")
     }else{
         return response.status(404).json("Recado não encontrado.")
     }
