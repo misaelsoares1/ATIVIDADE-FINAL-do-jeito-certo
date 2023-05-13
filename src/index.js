@@ -1,17 +1,12 @@
-import express, { request } from 'express';
+import express, { request, response } from 'express';
 const app = express();
 app.use(express.json());
 const bcrypt = require('bcrypt')
 const saltRounds = 1
 
 
-//CRUD DAS CONTAS
-//CRUD DAS ANOTAÇÕES
-//USAR bcrypt
-//FAZER COMMIT
 
-//cuidar regras: 
-//criar middleware para validar se existe contas com o mesmo email
+
 
 let usuarios = []
 
@@ -64,7 +59,6 @@ app.post("/usuarios/login", (request, response)=>{
             }
         })
     }
-    console.log(usuarios)
     
 })
 
@@ -76,7 +70,7 @@ app.get("/usuarios", (request, response)=>{
 })
 
 
-//primeiro jeito que eu fiz pra criar recados
+//criar recados
 let recados = []
 app.post("/recados", (request, response)=>{
     let recado = request.body
@@ -93,7 +87,7 @@ app.post("/recados", (request, response)=>{
         titulo: recado.titulo,
         recado: recado.recado         
     })
-    console.log(recados)
+
     return response.status(200).json("Recado criado com sucesso.")
 
 
@@ -101,10 +95,7 @@ app.post("/recados", (request, response)=>{
 })
 
 
-
-
-
-//lista recados
+//lista recados por id
 app.get("/usuarios/recados/:id", (request, response)=>{
     let id = Number(request.params.id)
     let recado = recados.filter(user => user.idUsuario===id)
@@ -112,25 +103,30 @@ app.get("/usuarios/recados/:id", (request, response)=>{
     
 })
 
-//update recado
 
-app.put("recados/:idRecado",  (request, response)=>{
-    try{
-        let id = Number(request.params.idRecado)
-        let titulo = request.body.titulo
-        let recado = request.body.recado
-
-        let index = recados.findIndex((recado)=>{recado.idRecado === id})
-
-        if(index){
-        recados[index].titulo = titulo
-        recados[index].recado = recado
-        }
-        return response.status(201).json("Recado alterado com sucesso.")
-    }catch(error){
-        return response.status(404).send(error.message)
+//update recado por id do recado
+app.put("/recados/:idRecado",  (request, response)=>{
+    let recado = recados.find(r => r.idRecado == (request.params.idRecado))
+    if(recado){
+        recado.titulo = request.body.titulo
+        recado.recado = request.body.recado
+        return response.status(200).json("Recado alterado com sucesso.")
+    }else{
+        return response.status(404).json("Recado não encontrado")
     }
+})
 
+
+//delete recado por id
+app.delete("/recados/delete/:idRecado", (request, response)=>{
+    let recado = recados.find(r => r.idRecado == (request.params.idRecado))
+    if(recado){
+        let index = recados.indexOf(recado)
+        recados.splice(index, 1)
+        return response.status(200).json("Recado removido com sucesso.")
+    }else{
+        return response.status(404).json("Recado não encontrado.")
+    }
 })
 
 
